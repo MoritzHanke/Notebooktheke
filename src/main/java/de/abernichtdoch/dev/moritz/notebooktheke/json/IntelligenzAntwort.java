@@ -1,4 +1,4 @@
-package de.abernichtdoch.dev.moritz.notebooktheke.domain;
+package de.abernichtdoch.dev.moritz.notebooktheke.json;
 
 public class IntelligenzAntwort {
 

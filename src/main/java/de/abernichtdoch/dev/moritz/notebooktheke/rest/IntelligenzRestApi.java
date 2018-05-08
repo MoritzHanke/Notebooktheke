@@ -1,6 +1,6 @@
 package de.abernichtdoch.dev.moritz.notebooktheke.rest;
 
-import de.abernichtdoch.dev.moritz.notebooktheke.domain.IntelligenzAntwort;
+import de.abernichtdoch.dev.moritz.notebooktheke.json.IntelligenzAntwort;
 import de.abernichtdoch.dev.moritz.notebooktheke.service.IntelligencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,5 +22,12 @@ public class IntelligenzRestApi {
 
         return new IntelligenzAntwort(hello, intell);
     }
+
+    @RequestMapping("/notebooks/{nummer}/create")
+    public String create(@PathVariable Long nummer){
+
+        return service.createNotebook(nummer);
+    }
+
 
 }
