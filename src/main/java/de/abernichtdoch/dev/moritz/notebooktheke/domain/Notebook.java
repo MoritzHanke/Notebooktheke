@@ -1,28 +1,23 @@
 package de.abernichtdoch.dev.moritz.notebooktheke.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Notebook {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    @NotNull
+    private Long number;
 
-    private Long nummer;
-
-    public void setNummer(Long nummer) {
-        this.nummer = nummer;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getNummer() {
-        return nummer;
+    public Notebook(@NotNull Long number) {
+        this.number = number;
     }
 }
