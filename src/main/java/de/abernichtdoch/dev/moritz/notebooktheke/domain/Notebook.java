@@ -1,5 +1,6 @@
 package de.abernichtdoch.dev.moritz.notebooktheke.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,13 +12,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Notebook {
 
     @Id
     @NotNull
     private Long number;
 
-    public Notebook(@NotNull Long number) {
-        this.number = number;
-    }
 }

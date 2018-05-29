@@ -1,5 +1,6 @@
 package de.abernichtdoch.dev.moritz.notebooktheke.service;
 
+import com.google.common.collect.Lists;
 import de.abernichtdoch.dev.moritz.notebooktheke.domain.Booking;
 import de.abernichtdoch.dev.moritz.notebooktheke.domain.Notebook;
 import de.abernichtdoch.dev.moritz.notebooktheke.repo.BookingRepo;
@@ -38,5 +39,9 @@ public class BookingService {
 
     public Booking getBooking(Long id) {
         return bookingRepo.findById(id).orElseThrow( () -> new IllegalArgumentException("Buchung nicht gefunden: Id = " + id));
+    }
+
+    public List<Booking> getAllBookings() {
+        return Lists.newArrayList(bookingRepo.findAll());
     }
 }
