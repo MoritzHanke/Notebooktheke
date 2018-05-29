@@ -25,6 +25,8 @@ public class Booking {
     @NotNull
     private List<Notebook> notebooks;
 
+    //todo Referenzen einbauen
+
 /*
     @ManyToOne
     @NotNull
