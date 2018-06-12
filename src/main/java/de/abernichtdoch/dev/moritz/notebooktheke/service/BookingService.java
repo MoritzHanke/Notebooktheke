@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +32,7 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setNotebooks(notebooks);
         booking.setStart(LocalDateTime.now());
-        booking.setEnd(LocalDateTime.now());
+        booking.setEnd(LocalDateTime.now().plusHours(2));
         bookingRepo.save(booking);
 
         return booking;
@@ -44,4 +45,12 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return Lists.newArrayList(bookingRepo.findAll());
     }
+
+    public List<Booking> getAllBookings( LocalDateTime start, LocalDateTime end) {
+        return bookingRepo.findByEndAfterAndStartBefore(start, end);
+    }
+
+
+
+
 }
