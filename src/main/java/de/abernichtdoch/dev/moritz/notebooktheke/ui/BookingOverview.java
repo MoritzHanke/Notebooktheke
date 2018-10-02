@@ -38,19 +38,18 @@ public class BookingOverview extends UI {
     @Override
     protected void init(VaadinRequest request) {
 
-        grid.setItems(loadBookings().values());
+        Map<Notebook, NotebookBookingOverviewModel> models = loadBookings();
+        grid.removeAllColumns();
+        grid.setItems(models.values().stream().sorted(NotebookBookingOverviewModel::compare));
 
         grid.addColumn(model -> model.getNotebook().getNumber()).setCaption("Notebook");
 
         for (int hour = 8; hour < 16; hour++) {
-            for (int min = 0; min < 60; min += 5) {
-                LocalDateTime now = LocalDateTime.now();
-                LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), hour, min);
-                LocalDateTime end = start.plusMinutes(5);
-                grid.addColumn(nb -> nb.isBooked(start, end) ? "x" : "").setCaption("" + hour + ":" + min);
-            }
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), hour, 0);
+            LocalDateTime end = start.plusMinutes(60);
+            grid.addColumn(nb -> nb.isBooked(start, end) ? "x" : "").setCaption("" + hour + "-" + (hour + 1));
         }
-
         VerticalLayout layout = new VerticalLayout(grid);
         setContent(layout);
     }

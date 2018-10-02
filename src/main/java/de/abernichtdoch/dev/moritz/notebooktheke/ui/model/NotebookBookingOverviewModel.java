@@ -30,4 +30,11 @@ public class NotebookBookingOverviewModel {
     public Notebook getNotebook() {
         return notebook;
     }
+
+    public int compare(NotebookBookingOverviewModel model){
+        if (notebook.equals(model.notebook))
+            return 0;
+
+        return model.notebook.getNumber() > notebook.getNumber() ? -1 : 1;
+    }
 }

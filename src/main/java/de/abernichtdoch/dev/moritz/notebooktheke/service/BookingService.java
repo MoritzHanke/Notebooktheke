@@ -23,7 +23,7 @@ public class BookingService {
     @Autowired
     BookingRepo bookingRepo;
 
-    public Booking createBooking(List<Long> notebookIdList){
+    public Booking createBooking(List<Long> notebookIdList, LocalDateTime start, LocalDateTime end){
 
         List<Notebook> notebooks = notebookIdList.stream()
                 .map(id -> notebookRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Notebook existiert nicht: " + id)))
@@ -31,8 +31,8 @@ public class BookingService {
 
         Booking booking = new Booking();
         booking.setNotebooks(notebooks);
-        booking.setStart(LocalDateTime.now());
-        booking.setEnd(LocalDateTime.now().plusHours(2));
+        booking.setStart(start);
+        booking.setEnd(end);
         bookingRepo.save(booking);
 
         return booking;
