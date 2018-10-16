@@ -25,17 +25,14 @@ public class Booking {
     @NotNull
     private List<Notebook> notebooks;
 
-    //todo Referenzen einbauen
-
-/*
-    @ManyToOne
+    /*@ManyToOne(fetch = FetchType.EAGER)
     @NotNull
     private Room room;
-
-    @ManyToOne
+*/
+    @ManyToOne(fetch = FetchType.EAGER)
     @NotNull
     private Person person;
-*/
+
     @NotNull
     private LocalDateTime start;
 

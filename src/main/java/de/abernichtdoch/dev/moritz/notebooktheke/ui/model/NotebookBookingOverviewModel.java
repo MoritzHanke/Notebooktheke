@@ -6,6 +6,7 @@ import de.abernichtdoch.dev.moritz.notebooktheke.domain.Notebook;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class NotebookBookingOverviewModel {
 
@@ -26,6 +27,11 @@ public class NotebookBookingOverviewModel {
                 .anyMatch(booking -> booking.getEnd().isAfter(start) && booking.getStart().isBefore(end));
     }
 
+    public Optional<Booking> getBooking(LocalDateTime start, LocalDateTime end) {
+        return bookings.stream()
+                .filter(booking -> booking.getEnd().isAfter(start) && booking.getStart().isBefore(end))
+                .findAny();
+    }
 
     public Notebook getNotebook() {
         return notebook;
@@ -37,4 +43,5 @@ public class NotebookBookingOverviewModel {
 
         return model.notebook.getNumber() > notebook.getNumber() ? -1 : 1;
     }
+
 }

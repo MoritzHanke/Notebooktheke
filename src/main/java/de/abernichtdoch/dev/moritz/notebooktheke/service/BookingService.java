@@ -3,14 +3,15 @@ package de.abernichtdoch.dev.moritz.notebooktheke.service;
 import com.google.common.collect.Lists;
 import de.abernichtdoch.dev.moritz.notebooktheke.domain.Booking;
 import de.abernichtdoch.dev.moritz.notebooktheke.domain.Notebook;
+import de.abernichtdoch.dev.moritz.notebooktheke.domain.Person;
 import de.abernichtdoch.dev.moritz.notebooktheke.repo.BookingRepo;
 import de.abernichtdoch.dev.moritz.notebooktheke.repo.NotebookRepo;
+import de.abernichtdoch.dev.moritz.notebooktheke.repo.PersonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,14 +24,22 @@ public class BookingService {
     @Autowired
     BookingRepo bookingRepo;
 
-    public Booking createBooking(List<Long> notebookIdList, LocalDateTime start, LocalDateTime end){
+    @Autowired
+    PersonRepo personRepo;
+
+    public Booking createBooking(List<Long> notebookIdList, LocalDateTime start, LocalDateTime end, String AccountEmail){
 
         List<Notebook> notebooks = notebookIdList.stream()
                 .map(id -> notebookRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("Notebook existiert nicht: " + id)))
                 .collect(Collectors.toList());
 
+        List<String> emails = Arrays.asList("someperson@gmail.com", "blabla@gmx.de");
+        String email = emails.get(new Random().nextInt() % emails.size());
+        Person person = personRepo.findById(email).orElseThrow(() -> new IllegalArgumentException("Person existiert nicht: " + email));
+
         Booking booking = new Booking();
         booking.setNotebooks(notebooks);
+        booking.setPerson(person);
         booking.setStart(start);
         booking.setEnd(end);
         bookingRepo.save(booking);

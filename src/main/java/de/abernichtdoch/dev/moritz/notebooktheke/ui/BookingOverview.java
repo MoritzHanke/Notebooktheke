@@ -2,6 +2,7 @@ package de.abernichtdoch.dev.moritz.notebooktheke.ui;
 
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -21,12 +22,17 @@ import java.util.stream.IntStream;
 @SpringUI(path = "/overview")
 public class BookingOverview extends UI {
 
+    public static final int FROM_HOUR = 8;
+    public static final int TO_HOUR = 16;
     @Autowired
     private BookingService bookingService;
 
     //private final Binder<AdvertiserMapping> binder = new Binder<>(AdvertiserMapping.class);
 
     private final Grid<NotebookBookingOverviewModel> grid = new Grid<>(NotebookBookingOverviewModel.class);
+
+    private final DateField dateField = new DateField();
+
     /*
     private final Label title = new Label("AWIN Advertiser IDs mapping");
     private final TextField awinAdvertiserId = new TextField("AWIN Advertiser ID");
@@ -38,27 +44,27 @@ public class BookingOverview extends UI {
     @Override
     protected void init(VaadinRequest request) {
 
-        Map<Notebook, NotebookBookingOverviewModel> models = loadBookings();
+        LocalDateTime day = LocalDateTime.of(2018, 10,2, 0,0);
+
+        Map<Notebook, NotebookBookingOverviewModel> models = loadBookings(day, FROM_HOUR, TO_HOUR);
         grid.removeAllColumns();
         grid.setItems(models.values().stream().sorted(NotebookBookingOverviewModel::compare));
 
         grid.addColumn(model -> model.getNotebook().getNumber()).setCaption("Notebook");
 
-        for (int hour = 8; hour < 16; hour++) {
-            LocalDateTime now = LocalDateTime.now();
-            LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), hour, 0);
+        for (int hour = FROM_HOUR; hour < TO_HOUR; hour++) {
+            LocalDateTime start = LocalDateTime.of(day.getYear(), day.getMonth(), day.getDayOfMonth(), hour, 0);
             LocalDateTime end = start.plusMinutes(60);
-            grid.addColumn(nb -> nb.isBooked(start, end) ? "x" : "").setCaption("" + hour + "-" + (hour + 1));
+            //grid.addColumn(nbModel -> nbModel.isBooked(start, end) ? "x" : "").setCaption("" + hour + "-" + (hour + 1));
+            grid.addColumn(nbModel -> nbModel.getBooking(start, end).map(booking -> booking.getPerson().getName()).orElse("")).setCaption("" + hour + "-" + (hour + 1));
         }
         VerticalLayout layout = new VerticalLayout(grid);
         setContent(layout);
     }
 
-    private Map<Notebook, NotebookBookingOverviewModel> loadBookings() {
-
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime start = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 8, 0);
-        LocalDateTime end = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 16, 0);
+    private Map<Notebook, NotebookBookingOverviewModel> loadBookings(LocalDateTime day, int fromHour, int toHour) {
+        LocalDateTime start = LocalDateTime.of(day.getYear(), day.getMonth(), day.getDayOfMonth(), fromHour, 0);
+        LocalDateTime end = LocalDateTime.of(day.getYear(), day.getMonth(), day.getDayOfMonth(), toHour, 0);
         List<Booking> bookings = bookingService.getAllBookings(start, end);
 
         Map<Notebook, NotebookBookingOverviewModel> models = new HashMap<>();

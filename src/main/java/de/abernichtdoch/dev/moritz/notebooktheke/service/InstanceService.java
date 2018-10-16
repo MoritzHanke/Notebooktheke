@@ -2,8 +2,10 @@ package de.abernichtdoch.dev.moritz.notebooktheke.service;
 
 import com.google.common.collect.Lists;
 import de.abernichtdoch.dev.moritz.notebooktheke.domain.Notebook;
+import de.abernichtdoch.dev.moritz.notebooktheke.domain.Person;
 import de.abernichtdoch.dev.moritz.notebooktheke.domain.Room;
 import de.abernichtdoch.dev.moritz.notebooktheke.repo.NotebookRepo;
+import de.abernichtdoch.dev.moritz.notebooktheke.repo.PersonRepo;
 import de.abernichtdoch.dev.moritz.notebooktheke.repo.RoomRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class InstanceService {
     @Autowired
     RoomRepo roomRepo;
 
+    @Autowired
+    PersonRepo personRepo;
+
     //--------- ROOMS -----------------------------
 
     public Room createRoom(Long room) {
@@ -33,8 +38,7 @@ public class InstanceService {
         }
 
         Room aRoom = new Room(room, String.format("R.%03d", room));
-        roomRepo.save(aRoom);
-        return aRoom;
+        return roomRepo.save(aRoom);
     }
 
     public Room getRoom(Long Room) {
@@ -53,8 +57,7 @@ public class InstanceService {
 
     public Notebook createNotebook(Long number) {
         Notebook neuesNotebook = new Notebook(number);
-        notebookRepo.save(neuesNotebook);
-        return neuesNotebook;
+        return notebookRepo.save(neuesNotebook);
     }
 
     public Notebook getNotebook(Long number) {
@@ -67,8 +70,24 @@ public class InstanceService {
         return Lists.newArrayList(notebookRepo.findAll());
     }
 
-    //todo delete()
+    //-------------- Persons ------------------
 
-    //todo PERSON
+    public Person createPerson(String email, String name) {
+        Person neuePerson = new Person(name, email);
+        return personRepo.save(neuePerson);
+    }
+
+    public Person getPerson(String email) {
+        return personRepo.findById(email)
+                .orElseThrow(() -> new IllegalArgumentException("Person mit der angegebenen Email konnte nicht gefunden werden: Email = " + email));
+    }
+
+    public List<Person> getAllpersons() {
+        return Lists.newArrayList(personRepo.findAll());
+    }
+
+
+
+    //todo delete()
 
 }

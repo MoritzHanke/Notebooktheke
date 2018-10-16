@@ -1,6 +1,7 @@
 package de.abernichtdoch.dev.moritz.notebooktheke.rest;
 
 import de.abernichtdoch.dev.moritz.notebooktheke.domain.Notebook;
+import de.abernichtdoch.dev.moritz.notebooktheke.domain.Person;
 import de.abernichtdoch.dev.moritz.notebooktheke.domain.Room;
 import de.abernichtdoch.dev.moritz.notebooktheke.service.InstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,23 @@ public class InstanceRestApi {
         return service.createNotebook(number);
     }
 
+    //----------------- Persons --------------------------
+
+    @RequestMapping("/persons")
+    public List<Person> getallPersons(){
+        return service.getAllpersons();
+    }
+
+    @RequestMapping("/persons/{email}")
+    public Person getPerson(@PathVariable String email){
+        return service.getPerson(email);
+    }
+
+    @RequestMapping(value ="/persons/{email}/{name}", method = RequestMethod.POST)
+    public Person createPerson(@PathVariable String email, @PathVariable String name){
+        return service.createPerson(email, name);
+    }
+
     //todo delete()
 
-    //todo PERSON
 }
